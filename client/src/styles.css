@@ -3,5 +3,5 @@
 
 html::view-transition-old(root),
 html::view-transition-new(root) {
-  animation-duration: 1s; /* Change to your desired duration */
+  animation-duration: 0.5s; /* Change to your desired duration */
 }
