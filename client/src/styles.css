@@ -1,5 +1,7 @@
 @import "tailwindcss";
-@plugin "daisyui";
+@plugin "daisyui"{
+  themes:all;
+};
 
 html::view-transition-old(root),
 html::view-transition-new(root) {

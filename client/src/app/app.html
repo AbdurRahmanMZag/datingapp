@@ -1,5 +1,9 @@
 <app-nav />
 
-<div class="container text-center mt-24">
-    <router-outlet></router-outlet>
+<div
+    [class.mt-24]="router.url !== '/'"
+    [class.container]="router.url !== '/'"
+    [class.mx-auto]="router.url !== '/'" 
+>
+    <router-outlet />
 </div>

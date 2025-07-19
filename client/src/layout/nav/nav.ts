@@ -1,8 +1,9 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AccountService } from '../../core/services/account-service';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { ToastService } from '../../core/services/toast-service';
+import { themes } from '../theme';
 
 @Component({
   selector: 'app-nav',
@@ -10,11 +11,30 @@ import { ToastService } from '../../core/services/toast-service';
   templateUrl: './nav.html',
   styleUrl: './nav.css'
 })
-export class Nav {
+export class Nav implements OnInit {
+  protected themes = themes;
+  protected selectedTheme = signal(localStorage.getItem('theme') || 'light');
+
   protected toastService = inject(ToastService);
   protected router = inject(Router);
+
   protected accountService = inject(AccountService);
   protected creds: any = {};
+  
+  ngOnInit() {
+    document.documentElement.setAttribute('data-theme', this.selectedTheme());
+
+  }
+  handleSelectTheme(theme: string) {
+    this.selectedTheme.set(theme);
+    localStorage.setItem('theme', theme);
+    document.documentElement.setAttribute('data-theme', theme);
+
+    let elem = document.activeElement as HTMLDivElement;
+    if (elem) {
+      elem.blur(); // Remove focus from the dropdown
+    }
+  }
 
   login() {
     this.accountService.login(this.creds).subscribe({
