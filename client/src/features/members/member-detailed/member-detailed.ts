@@ -1,9 +1,10 @@
 import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { filter } from 'rxjs';
 import { Member } from '../../../types/member';
 import { MemberService } from '../../../core/services/member-service';
 import { AgePipe } from "../../../core/pipes/age-pipe";
+import { AccountService } from '../../../core/services/account-service';
 
 @Component({
   selector: 'app-member-detailed',
@@ -12,16 +13,16 @@ import { AgePipe } from "../../../core/pipes/age-pipe";
   styleUrl: './member-detailed.css'
 })
 export class MemberDetailed implements OnInit {
-  memberService = inject(MemberService);
+  protected memberService = inject(MemberService);
   protected route = inject(ActivatedRoute);
   protected router = inject(Router);
+  protected accountService = inject(AccountService);
   title = signal<string | undefined>('Profile');
-  member = signal<Member|undefined>(undefined);
+  protected isCurrentUser = computed(() => {
+    return this.accountService.currentUser()?.id === this.route.snapshot.paramMap.get('id');
+  });
 
   ngOnInit() {
-    this.route.data.subscribe(data => {
-      this.member.set(data['member']);
-    });
     this.title.set(this.route.firstChild?.snapshot?.title);
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)

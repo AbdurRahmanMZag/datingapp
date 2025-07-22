@@ -1,4 +1,4 @@
-@if (member(); as member) {
+@if (memberService.member(); as member) {
 <div class="flex gap-6">
     <div class="card bg-base-100 flex flex-col h-[85vh] w-1/4">
         <img src="{{member.imageUrl || '/user'}}" alt="image of member" class="rounded-full mx-10 mt-3 object-cover" />
@@ -24,7 +24,16 @@
         </div>
     </div>
     <div class="card bg-base-100 w-3/4 p-6">
-        <h3 class="card-title text-3xl text-primary">{{title()}}</h3>
+        <div class="flex justify-between items-center">
+            <h3 class="card-title text-3xl text-primary">{{title()}}</h3>
+            @if (isCurrentUser()) {
+                <button
+                (click)="memberService.isEditMode.set(!memberService.isEditMode())"
+                class="btn btn-outline btn-primary">
+                    {{memberService.isEditMode() ? 'Cancel' : 'Edit'}}
+                </button>
+            }
+        </div>
         <div class="divider"></div>
         <div>
             <router-outlet />
